@@ -1786,10 +1786,10 @@ function submitShortlist(){
   if(!f.act) return badSel('fAct', 'Start with the first question: <b>how would you like to progress</b> this application?');
   if(f.act === D.progress[0] && proceededCount() >= NEED_IN) return msg('You already have your two for interview. Leave ' + esc(shown(c)) + ' where they are, at Manager Shortlist. If one of your two drops out, this is who you come back to.', 'Leave this one on hold');
   if(f.act === D.progress[1] && rejectedCount() >= NEED_OUT) return msg('You have rejected two already. Leave ' + esc(shown(c)) + ' on hold until after the interviews, rather than closing the door now.', 'Leave this one on hold');
-  if(f.comment.length < 15){ $('fComment').classList.add('inp','bad'); return wrong('Reach will not take the form without a <b>comment for internal use</b>. One line: why this decision, against the role. Write it so you would be content for '+esc(shown(c))+' to read it.'); }
+  if(!f.comment){ $('fComment').classList.add('inp','bad'); return wrong('Reach will not take the form without a <b>comment for internal use</b>. A word or two is fine.'); }
   if(f.act === D.progress[1]){
     if(!f.reason) return badSel('fReason', 'Choose a <b>Rejection Reason</b>.');
-    if(f.reason === 'Other (please state)' && (!$('fOther') || $('fOther').value.trim().length < 5)) return wrong('You chose <b>Other</b>, so Reach needs you to <b>state</b> the reason.');
+    if(f.reason === 'Other (please state)' && (!$('fOther') || !$('fOther').value.trim())) return wrong('You chose <b>Other</b>, so Reach needs you to <b>state</b> the reason.');
     if(!f.talent) return badSel('fTalent', 'Answer the <b>talent bank</b> question. Would this person be worth contacting about a future vacancy?');
   } else {
     if(!f.next) return badSel('fNext', 'Confirm <b>how you would like to proceed</b>: a Teams meeting or a first interview.');
