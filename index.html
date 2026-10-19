@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 <title>Reach Simulation: Shortlisting</title>
 <style>
 /* ============ BASE ============ */
@@ -731,6 +732,49 @@ input.inp[type=date]{color:#3d4750}
 .dec.yes{background:#eaf6d6;color:#4f7a12}
 .dec.no{background:#fbe4e0;color:#a33a26}
 .dec.tm{background:#e3eefb;color:#2f5f96}
+.dec.hold{background:#fdf1d8;color:#8a5a00}
+html,body{font-family:"Mona Sans","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+/* ---- browser tabs ---- */
+.tabstrip{height:34px;flex:0 0 34px;background:#dfe3e8;display:flex;align-items:flex-end;padding:0 10px;gap:2px}
+.btab{position:relative;height:28px;width:240px;display:flex;align-items:center;gap:8px;padding:0 8px 0 11px;border-radius:8px 8px 0 0;font-size:12px;color:#3b444c;cursor:pointer}
+.btab:hover{background:#e9ecef}
+.btab.on{background:#f2f3f5}
+.btab img{width:14px;height:14px;flex:0 0 14px}
+.btab .tt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btab i{font-style:normal;font-size:10px;color:#5b6670;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 18px}
+.btab i:hover{background:#cfd5db}
+.btab.hot::after{content:"";position:absolute;inset:-2px;border:2px solid #5a9d18;border-radius:9px;animation:pulse 1.5s infinite}
+.tabnew{width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:#5b6670;font-size:18px;cursor:pointer}
+.winctl{margin-left:auto;display:flex;gap:24px;align-self:center;color:#5b6670;font-size:12px;padding-right:6px}
+#s-ssl.unfiltered .ss-chip,#s-ssl.unfiltered .ss-bar .vac-id{visibility:hidden}
+/* ---- Reach date picker ---- */
+#addBox .fc{position:relative}
+.dp-inp{cursor:pointer;background:#fff}
+.dp{display:none;position:absolute;left:0;top:calc(100% + 4px);z-index:40;background:#fff;border:1px solid #d6dbe0;border-radius:4px;
+  box-shadow:0 6px 16px rgba(0,0,0,.15);padding:6px 6px 4px;width:168px;font-size:11px}
+.dp.show{display:block}
+.dp .hd{display:flex;align-items:center;justify-content:space-between;padding:2px 2px 5px;font-weight:700;color:#3d5a80}
+.dp .hd b{cursor:pointer;padding:0 6px}
+.dp table{width:100%;border-collapse:collapse;text-align:center}
+.dp th{font-weight:700;color:#3d4750;padding:3px 0}
+.dp td{padding:3px 0;color:#3d5a80;cursor:pointer;border-radius:3px}
+.dp td:hover{background:#eef2f6}
+.dp td.off{color:#b8bec4;cursor:default;background:none}
+.dp td.sel{background:#93c83e;color:#1e2a10}
+.dp .clr{text-align:center;font-weight:700;color:#3d5a80;padding:5px 0 2px;cursor:pointer}
+/* ---- Add Slot pop-out ---- */
+#addBox .ah .po{margin-left:auto;width:22px;height:22px;border-radius:50%;background:#a8e04a;color:#2f3c46;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#addBox .ah .po svg{width:11px;height:11px}
+#addBox .ah .po + .x{margin-left:8px}
+/* ---- Outstanding Forms popover ---- */
+.c-stage{position:relative}
+.c-stage .opop{display:none;position:absolute;left:0;bottom:calc(100% + 4px);background:#fff;border:1px solid #d6dbe0;border-radius:6px;
+  box-shadow:0 4px 14px rgba(0,0,0,.12);z-index:30;white-space:nowrap;font-size:11px;min-width:160px}
+.c-stage:hover .opop{display:block}
+.opop b{display:block;padding:6px 10px;border-bottom:1px solid #e4e7ea;font-weight:500;color:#3d4750}
+.opop span{display:block;padding:6px 10px;color:#3d4750}
+#s-part2{background:radial-gradient(1200px 700px at 12% 8%,#e6f4c8 0%,#f4fae9 42%,#ffffff 78%)}
+.p2-tag{display:inline-block;background:#b4e83c;color:#2f3c46;font-weight:700;font-size:12px;letter-spacing:1.5px;padding:4px 12px;border-radius:12px;margin-bottom:16px}
 .sum .cm{color:#5d686f;font-style:italic}
 .readback{background:#2f3c46;color:#e9edf1;border-radius:8px;padding:11px 16px;font-size:13.5px;line-height:1.5;margin-bottom:14px}
 .readback b{color:#b4e83c}
@@ -758,8 +802,8 @@ input.inp[type=date]{color:#3d4750}
           <h3>What you will do</h3>
           <div class="step"><span class="dot"></span><span>Open your closed vacancy from the dashboard</span></div>
           <div class="step"><span class="dot"></span><span>Read each application against the role profile</span></div>
-          <div class="step"><span class="dot"></span><span>Shortlist or reject every applicant, with a reason</span></div>
-          <div class="step"><span class="dot"></span><span>Set up interview slots for one of your shortlist</span></div>
+          <div class="step"><span class="dot"></span><span>Put two through and reject two, each with a reason. The other two wait</span></div>
+          <div class="step"><span class="dot"></span><span>Part 2: set up one interview, with four slots to choose from</span></div>
         </div>
         <p>Nothing you do here touches the live system. Keep your process sheet next to the laptop and work through it together.</p>
       </div>
@@ -767,7 +811,7 @@ input.inp[type=date]{color:#3d4750}
         <img class="logo" id="wel-logo" alt="Reach">
         <h1>Shortlisting</h1>
         <p class="sub" style="margin-bottom:16px">A guided walk-through of shortlisting in Reach.</p>
-        <div class="brief"><b>Your Project Coordinator vacancy</b> for the North West delivery team in Chorley has closed. Eight people applied. You have room to interview <b>four</b>.</div>
+        <div class="brief"><b>Your Project Coordinator vacancy</b> for the North West delivery team in Chorley has closed. Six people applied. You have room to interview <b>two</b>.</div>
         <label for="nameInput">Your name (the person at the keyboard)</label>
         <input id="nameInput" type="text" placeholder="e.g. Jordan Taylor" autocomplete="off" spellcheck="false">
         <div class="wel-err" id="nameErr"></div>
@@ -779,7 +823,7 @@ input.inp[type=date]{color:#3d4750}
 
 <!-- ============================ 1. DASHBOARD ============================ -->
 <section class="screen" id="s-dash">
-  <div class="chrome"><div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div><div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>https://recruiter.storycareers.com/dashboard</div><div class="rt"><span class="avatar"></span><span>Chat</span></div></div>
+  <div class="tabstrip"></div><div class="chrome"><div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div><div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>https://recruiter.storycareers.com/dashboard</div><div class="rt"><span class="avatar"></span><span>Chat</span></div></div>
   <div class="rx">
     <div class="rx-rail" data-rail="dash"></div>
     <div class="rx-main">
@@ -793,8 +837,8 @@ input.inp[type=date]{color:#3d4750}
         <div class="banner"><img id="dash-banner" alt=""></div>
         <div class="stats">
           <div class="stat"><b>Live Vacancies</b><i>1</i></div>
-          <div class="stat"><b>Active Candidates</b><i id="st-active">8</i></div>
-          <div class="stat"><b>Actions</b><i id="st-actions">8</i></div>
+          <div class="stat"><b>Active Candidates</b><i id="st-active">6</i></div>
+          <div class="stat"><b>Actions</b><i id="st-actions">6</i></div>
           <div class="stat"><b>Upcoming Interviews</b><i>0</i></div>
           <div class="stat"><b>Pending Requisitions</b><i>0</i></div>
           <div class="stat"><b>Pending Approvals</b><i>0</i></div>
@@ -807,8 +851,8 @@ input.inp[type=date]{color:#3d4750}
                 <div class="vac-row">
                   <div class="t"><b><span class="vac-link" id="btnVacName" role="link" tabindex="0">Project Coordinator</span></b><small><i class="vac-id">327114</i> - Chorley Office</small></div>
                   <div class="o nm-full">Colleague</div>
-                  <div class="a"><span id="dv-active">8 Active</span><small id="dv-rej">0 Rejected/Withdrawn</small></div>
-                  <button class="btn-perform" id="btnPerformVac">&#9654; Perform <span class="n" id="dv-n">8</span></button>
+                  <div class="a"><span id="dv-active">6 Active</span><small id="dv-rej">0 Rejected/Withdrawn</small></div>
+                  <button class="btn-perform" id="btnPerformVac">&#9654; Perform <span class="n" id="dv-n">6</span></button>
                 </div>
               </div>
             </div>
@@ -832,12 +876,12 @@ input.inp[type=date]{color:#3d4750}
 
 <!-- ============================ 2. CANDIDATE LIST ============================ -->
 <section class="screen" id="s-list">
-  <div class="chrome"><div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div><div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>https://recruiter.storycareers.com/candidate/list/all?filter=active</div><div class="rt"><span class="avatar"></span><span>Chat</span></div></div>
+  <div class="tabstrip"></div><div class="chrome"><div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div><div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>https://recruiter.storycareers.com/candidate/list/all?filter=active</div><div class="rt"><span class="avatar"></span><span>Chat</span></div></div>
   <div class="rx">
     <div class="rx-rail" data-rail="candidates"></div>
     <div class="rx-main">
       <div class="rx-top" style="height:50px;flex:0 0 50px">
-        <div><h2 style="font-size:15px;font-weight:600">Candidates for All Vacancies</h2><div style="font-size:11.5px;color:#6b7680;margin-top:2px">There are <span id="cl-total">8</span> total candidates.</div></div>
+        <div><h2 style="font-size:15px;font-weight:600">Candidates for All Vacancies</h2><div style="font-size:11.5px;color:#6b7680;margin-top:2px">There are <span id="cl-total">6</span> total candidates.</div></div>
         <div class="right"><div class="rx-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></div><div class="rx-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm7-6v-5a7 7 0 0 0-5-6.7V3a2 2 0 1 0-4 0v1.3A7 7 0 0 0 5 11v5l-2 2v1h18v-1z"/></svg></div><div class="rx-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h3l5 4V6L6 10H3zm12.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg></div><div class="rx-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div><span class="rx-user nm-full">Colleague</span><img class="avatar mark" alt=""></div>
       </div>
       <div class="cl-bar">
@@ -858,7 +902,7 @@ input.inp[type=date]{color:#3d4750}
 
 <!-- ============================ 3. CANDIDATE PAGE ============================ -->
 <section class="screen" id="s-cand">
-  <div class="chrome"><div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div><div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>https://recruiter.storycareers.com/actions/perform</div><div class="rt"><span class="avatar"></span><span>Chat</span></div></div>
+  <div class="tabstrip"></div><div class="chrome"><div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div><div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>https://recruiter.storycareers.com/actions/perform</div><div class="rt"><span class="avatar"></span><span>Chat</span></div></div>
   <div class="rx">
     <div class="rx-rail" data-rail="actions"></div>
     <div class="rx-main">
@@ -879,9 +923,34 @@ input.inp[type=date]{color:#3d4750}
   </div>
 </section>
 
+<!-- ============================ PART 2 SPLASH ============================ -->
+<section class="screen" id="s-part2">
+  <div class="wel-wrap">
+    <div class="wel-card" style="width:900px">
+      <div class="wel-left">
+        <div>
+          <h3>What you will do</h3>
+          <div class="step"><span class="dot"></span><span>Open <b>Manager Interview Slot Check</b> and pick one of your two</span></div>
+          <div class="step"><span class="dot"></span><span><b>Create interview slots</b> opens a new tab. <b>Edit</b> your vacancy there</span></div>
+          <div class="step"><span class="dot"></span><span><b>+ Add Slot</b>: one date, four times, 30 minutes each</span></div>
+          <div class="step"><span class="dot"></span><span>Switch back to their tab and send a <b>Face to Face</b> invitation</span></div>
+        </div>
+        <p>They choose the slot that suits them. You set the interview up once.</p>
+      </div>
+      <div class="wel-right">
+        <span class="p2-tag">PART 2</span>
+        <h1>Set up the interview</h1>
+        <p class="sub" id="p2Line" style="margin-bottom:16px"></p>
+        <div class="brief"><b>One interview, face to face.</b> Invite one of your two to a 1st interview at the Chorley Office. Give them <b>four slots of 30 minutes</b> on the same day to choose from. You lead, with one colleague alongside you.</div>
+        <button class="btn-go" id="btnPart2">Start Part 2</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============================ 4. INTERVIEW SELF SELECT SLOTS ============================ -->
 <section class="screen" id="s-ssl">
-  <div class="chrome"><div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div><div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>https://recruiter.storycareers.com/interviews/selfselect</div><div class="rt"><span class="avatar"></span><span>Chat</span></div></div>
+  <div class="tabstrip"></div><div class="chrome"><div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div><div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>https://recruiter.storycareers.com/interviews/selfselect</div><div class="rt"><span class="avatar"></span><span>Chat</span></div></div>
   <div class="rx">
     <div class="rx-rail" data-rail="interviews"></div>
     <div class="rx-main">
@@ -910,7 +979,7 @@ input.inp[type=date]{color:#3d4750}
 
 <!-- ============================ 5. INTERVIEW SLOTS FOR VACANCY ============================ -->
 <section class="screen" id="s-slots">
-  <div class="chrome"><div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div><div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>https://recruiter.storycareers.com/interviews/slots/327114</div><div class="rt"><span class="avatar"></span><span>Chat</span></div></div>
+  <div class="tabstrip"></div><div class="chrome"><div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div><div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>https://recruiter.storycareers.com/interviews/slots/327114</div><div class="rt"><span class="avatar"></span><span>Chat</span></div></div>
   <div class="rx">
     <div class="rx-rail" data-rail="interviews"></div>
     <div class="rx-main">
@@ -946,7 +1015,7 @@ input.inp[type=date]{color:#3d4750}
           <h4>What you did</h4>
           <div class="rec"><span class="tick">&#10003;</span><span><b>Opened the vacancy</b>From your hiring manager dashboard</span></div>
           <div class="rec"><span class="tick">&#10003;</span><span><b>Read every application</b>Against the role profile</span></div>
-          <div class="rec"><span class="tick">&#10003;</span><span><b>Decided on all eight</b>Nobody left sitting in Reach</span></div>
+          <div class="rec"><span class="tick">&#10003;</span><span><b>Two in, two out, two on hold</b>The other two wait until after the interviews</span></div>
           <div class="rec"><span class="tick">&#10003;</span><span><b>Recorded your reasons</b>On the shortlisting form</span></div>
           <div class="rec"><span class="tick">&#10003;</span><span><b>Created interview slots</b><span id="fin-slots">For your first interviews</span></span></div>
           <div class="rec"><span class="tick">&#10003;</span><span><b>Sent the invitation</b><span id="fin-inv">The candidate picks a slot</span></span></div>
@@ -970,10 +1039,10 @@ input.inp[type=date]{color:#3d4750}
 <!-- ============================ ADD SLOT MODAL ============================ -->
 <div id="addWrap">
   <div id="addBox">
-    <div class="ah">Add Slot<span class="x" id="btnAddX">&#10005;</span></div>
+    <div class="ah">Add Slot<span class="po" id="btnAddPop" title="Click here to open in a new tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></span><span class="x" id="btnAddX">&#10005;</span></div>
     <div class="ab">
       <div class="af-l">
-        <div class="arow"><label>Interview Date</label><div class="fc"><input class="inp" type="date" id="slDate"></div></div>
+        <div class="arow"><label>Interview Date</label><div class="fc"><input class="inp dp-inp" type="text" id="slDate" autocomplete="off" readonly><div class="dp" id="slCal"></div></div></div>
         <div class="arow"><label style="padding-top:22px">Interview Time(s)</label><div class="fc"><div id="slTimes"></div><button class="btn-another" id="btnAnother">Add Another</button></div></div>
         <div class="arow"><label>Interview Length</label><div class="fc"><div id="slLen"></div></div></div>
         <div class="arow"><label>Venue</label><div class="fc"><div id="slVenue"></div></div></div>
@@ -1093,7 +1162,7 @@ thinkInvite: {
   ra: {h:'Requires reasonable adjustments', t:'The flag tells you {n} needs adjustments, not what they are. Does your message ask what would help? Now is the time to sort it, not when they arrive.'}
 },
 
-/* ---- the eight applicants ---- */
+/* ---- the six applicants ---- */
 cands: [
 { key:'sophie', appId:'1114310421', title:'Miss', first:'Sophie', last:'Hartley', pref:'', addr:'14 Moss Lane', town:'Leyland', county:'Lancashire', pc:'PR25 9ZX',
   phone:'07700 900142', email:'sophie.hartley@example.com', refBy:'', agency:'', flags:['ra'],
@@ -1147,19 +1216,6 @@ cands: [
       edu:['GCSEs: 5'],
       extra:['CSCS Labourer card','PTS','Full UK driving licence']}},
 
-{ key:'aaliyah', appId:'1114310342', title:'Ms', first:'Aaliyah', last:'Rahman', pref:'', addr:'41 Preston New Road', town:'Blackburn', county:'Lancashire', pc:'BB2 9ZL',
-  phone:'07700 900561', email:'aaliyah.rahman@example.com', refBy:'', agency:'', flags:[],
-  emp:[{t:'Project Support Assistant',co:'Calder Utilities Ltd',d:'August 2024 to present',p:'Supports two project managers on water main replacement schemes. Updates the project tracker and cost report in Excel, raises purchase orders for materials, books welfare units and traffic management, and takes minutes at progress meetings.'},
-       {t:'Customer Service Adviser',co:'Pennine Energy',d:'2021 to 2024',p:'Handled more than 60 calls a day on billing queries, resolved complaints and met quality targets.'}],
-  quals:'A levels in Business and English. Excel (Intermediate) certificate.',
-  statement:'I moved into project support last year and I\'ve loved it. I\'ve learned how much difference it makes when the paperwork is right before work starts. My call centre years mean I\'m comfortable on the phone with anyone, even when they\'re not happy. I\'d like a bigger role with more responsibility, on a rail team.',
-  ans:{lic:'Yes',dbs:'Yes',da:'Yes',conv:'No',convd:'',ra:'No',rad:'',mil:'No'},
-  cv:{profile:'Project support assistant on utilities schemes, with three years of customer service behind me. Organised, friendly and good with numbers.',
-      jobs:[{h:'Project Support Assistant, Calder Utilities Ltd (2024 to present)',b:['Update project trackers and cost reports in Excel','Raise purchase orders for materials','Book welfare and traffic management','Minute progress meetings']},
-            {h:'Customer Service Adviser, Pennine Energy (2021 to 2024)',b:['60+ calls a day on billing queries','Resolved complaints first time','Top quality score in my team, 2023']}],
-      edu:['A levels: Business (B), English (C)','Excel Intermediate certificate (2024)'],
-      extra:['Full UK driving licence','Microsoft 365']}},
-
 { key:'tom', appId:'1114310327', title:'Mr', first:'Tom', last:'Gallagher', pref:'', addr:'66 Wigan Lane', town:'Wigan', county:'Greater Manchester', pc:'WN1 9ZB',
   phone:'07700 900674', email:'tom.gallagher@example.com', refBy:'', agency:'', flags:['conv','dbs'],
   emp:[{t:'Project Coordinator',co:'Pennine Rail Services Ltd',d:'2019 to present',p:'Coordinates up to four worksites on track and drainage renewals. Builds and issues possession packs, books plant and welfare, raises purchase orders, reconciles subcontractor applications and produces the weekly client progress report.'},
@@ -1172,19 +1228,6 @@ cands: [
             {h:'Site Clerk, Halton Civil Engineering (2016 to 2019)',b:['Timesheets, deliveries and the site diary']}],
       edu:['HNC Construction Management (2018)','GCSEs: 7 including English and Maths'],
       extra:['PTS','Full UK driving licence','Excel, Microsoft Project, COINS']}},
-
-{ key:'chloe', appId:'1114310311', title:'Miss', first:'Chloe', last:'Barker', pref:'', addr:'5 Wigan Road', town:'Euxton', county:'Lancashire', pc:'PR7 9ZT',
-  phone:'07700 900783', email:'chloe.barker@example.com', refBy:'', agency:'', flags:['da'],
-  emp:[{t:'Office Coordinator',co:'Harlow & Finch Consulting Engineers',d:'2022 to present',p:'First point of contact for clients and contractors. Manages the engineers\' diaries, raises purchase orders and processes supplier invoices, produces monthly fee reports in Excel and organises site visits.'},
-       {t:'Business Administration Apprentice',co:'Harlow & Finch Consulting Engineers',d:'2020 to 2022',p:'Reception, post, filing and invoice processing.'}],
-  quals:'Level 3 Apprenticeship in Business Administration (Distinction).',
-  statement:'I\'ve worked with engineers for five years and I enjoy keeping a busy team organised. I\'m the one who notices when an invoice doesn\'t match an order. I live in Euxton, so I\'d be five minutes from the office, and I\'d love to work on the delivery side rather than design.',
-  ans:{lic:'Yes',dbs:'Yes',da:'No',conv:'No',convd:'',ra:'No',rad:'',mil:'No'},
-  cv:{profile:'Office coordinator at a consulting engineers. Five years of keeping engineers, clients and suppliers organised.',
-      jobs:[{h:'Office Coordinator, Harlow & Finch Consulting Engineers (2022 to present)',b:['First point of contact for clients and contractors','Raise purchase orders and process invoices','Monthly fee reports in Excel','Organise site visits and travel']},
-            {h:'Business Administration Apprentice, Harlow & Finch (2020 to 2022)',b:['Reception, post and filing','Invoice processing']}],
-      edu:['Level 3 Business Administration Apprenticeship, Distinction (2022)','GCSEs: 9 including English and Maths'],
-      extra:['Full UK driving licence','Excel, Sage, Microsoft 365']}},
 
 { key:'nathan', appId:'1114310298', title:'Mr', first:'Nathan', last:'Coyle', pref:'', addr:'112 Lord Street', town:'Southport', county:'Merseyside', pc:'PR9 9ZW',
   phone:'07700 900896', email:'nathan.coyle@example.com', refBy:'', agency:'', flags:[],
@@ -1263,7 +1306,7 @@ var BYKEY = {}; CANDS.forEach(function(c){ BYKEY[c.key] = c; });
 var state;
 function freshState(name, first){
   return { name:name||'', first:first||'', dec:{}, draft:{}, slots:[], slotCand:null, invite:null,
-           phase:'sift', tab:'all', viewed:[], perform:false, cur:null, pane:'overview', comments:{} };
+           phase:'sift', tab:'all', viewed:[], perform:false, cur:null, pane:'overview', comments:{}, t1:null, t2:null, sslFiltered:true };
 }
 state = freshState();
 
@@ -1333,10 +1376,10 @@ function hintFor(id){
                                                     : {t:'There are no slots yet. Use the orange <b>Create interview slots</b> button.', el:'#btnCreateSlots'};
     return {t:'Read the <b>App Form</b> and <b>CV</b> tabs against the role profile in <b>Job Files</b>. Then answer the Shortlisting Form on the left and <b>Submit form</b>.', el:'[data-pane="jobfiles"]'};
   }
-  if(id === 's-ssl') return state.slots.length ? {t:'Your slots are saved. Go back to the candidate: <b>Candidates</b> on the left, then <b>You &rarr;</b>.', el:'#s-ssl [data-rail-go="candidates"]'}
+  if(id === 's-ssl') return state.slots.length ? {t:'Your slots are saved. Click the first tab at the top, your candidate\'s form, to send the invitation.', el:'#s-ssl .btab[data-t="1"]'}
                                                : {t:'Use <b>Edit</b> on your vacancy to manage its slots.', el:'#btnSlotEdit'};
-  if(id === 's-slots' && $('addWrap').classList.contains('show')) return {t:'Fill in every field on the left. <b>Add Another</b> gives a second time, and the additional interviewers box takes a name.'};
-  if(id === 's-slots') return state.slots.length ? {t:'Slots saved. <b>Return to listing</b>, then go back to your candidate.', el:'#btnSlotReturn'}
+  if(id === 's-slots' && $('addWrap').classList.contains('show')) return {t:'One date, and <b>Add Another</b> until there are four times. 30 Minutes, Chorley Office, 1st Interview, you as lead and a colleague in the additional interviewers box.'};
+  if(id === 's-slots') return state.slots.length ? {t:'Slots saved. Click the first tab at the top to go back to your candidate.', el:'#s-slots .btab[data-t="1"]'}
                                                  : {t:'Use <b>+ Add Slot</b> top right.', el:'#btnAddSlot'};
   return null;
 }
@@ -1361,8 +1404,47 @@ function show(id, coachHtml){
   if(coachHtml){ c.style.display = 'flex'; stage.classList.add('coached'); coach(coachHtml); }
   else { c.style.display = 'none'; stage.classList.remove('coached'); }
   var sc = document.querySelector('#'+id+' .rx-content'); if(sc) sc.scrollTop = 0;
+  renderBrowserTabs(id);
   armHints();
 }
+
+/* ---------- browser tabs: Create interview slots opens a new tab, as in Reach ---------- */
+var T1 = ['s-dash','s-list','s-cand'], T2 = ['s-ssl','s-slots'];
+var TAB_SUFFIX = ' | Story Contracting | Reach';
+function tabTitle(id){
+  if(id === 's-dash') return 'Dashboard' + TAB_SUFFIX;
+  if(id === 's-list') return 'Candidates' + TAB_SUFFIX;
+  if(id === 's-cand') return $('cpTitle').textContent + TAB_SUFFIX;
+  if(id === 's-ssl') return 'Interview Slots' + TAB_SUFFIX;
+  return 'Interview' + TAB_SUFFIX;
+}
+function renderBrowserTabs(id){
+  if(T1.indexOf(id) > -1) state.t1 = id; else if(T2.indexOf(id) > -1) state.t2 = id;
+  var strip = document.querySelector('#' + id + ' .tabstrip'); if(!strip) return;
+  var on2 = T2.indexOf(id) > -1;
+  function tab(n, t, on){ return '<div class="btab'+(on?' on':'')+'" data-t="'+n+'"><img src="'+(A.reachMark||'')+'" alt=""><span class="tt">'+esc(t)+'</span><i data-tx="'+n+'">&#10005;</i></div>'; }
+  strip.innerHTML = tab(1, tabTitle(state.t1 || 's-dash'), !on2) + (state.t2 ? tab(2, tabTitle(state.t2), on2) : '') +
+    '<span class="tabnew" data-tnew="1">+</span><span class="winctl"><span>&#8212;</span><span>&#9633;</span><span>&#10005;</span></span>';
+}
+function goTab1(){
+  if(state.t1 === 's-cand' && state.cur) return openCand(state.cur, state.pane);
+  if(state.t1 === 's-list') return goList();
+  goDash();
+}
+document.addEventListener('click', function(e){
+  var strip = e.target.closest('.tabstrip'); if(!strip) return;
+  e.stopPropagation();
+  if(e.target.closest('[data-tnew]')) return wrong('No need for a new tab. Everything you need is already open.');
+  var x = e.target.closest('[data-tx]'), t = e.target.closest('[data-t]');
+  if(x){
+    if(x.getAttribute('data-tx') === '1') return wrong('That would close Reach' + (state.t1 === 's-cand' && state.cur ? ' and ' + esc(shown(BYKEY[state.cur])) + '\'s form' : '') + '. Keep it open.');
+    state.t2 = null; return goTab1();
+  }
+  if(!t) return;
+  if(t.getAttribute('data-t') === '1') return goTab1();
+  return state.t2 === 's-slots' ? goSlots() : goSSL();
+}, true);
+
 function coach(html, kind){
   var c = $('coach'); c.classList.remove('hint','err'); if(kind) c.classList.add(kind);
   $('coachTxt').innerHTML = html;
@@ -1425,7 +1507,7 @@ function buildSelect(host, opts, onPick, ph, val){
   });
   return host;
 }
-function closeAll(){ each('.sel.open, .chipbox.open', function(s){ s.classList.remove('open'); }); each('.cogmenu.show', function(m){ m.classList.remove('show'); m.previousElementSibling && m.previousElementSibling.classList.remove('on'); }); }
+function closeAll(){ each('.dp.show', function(d){ d.classList.remove('show'); }); each('.sel.open, .chipbox.open', function(s){ s.classList.remove('open'); }); each('.cogmenu.show', function(m){ m.classList.remove('show'); m.previousElementSibling && m.previousElementSibling.classList.remove('on'); }); }
 document.addEventListener('click', closeAll);
 
 /* ---------- left rail (filled icons, as Sim 1) ---------- */
@@ -1478,6 +1560,10 @@ function isSlotMode(c){ return state.phase === 'slots' && isInterview(c) && (!st
 function firstPending(){ for(var i=0;i<CANDS.length;i++) if(isPending(CANDS[i])) return CANDS[i]; return null; }
 function active(){ return CANDS.filter(function(c){ return !isRejected(c); }); }
 function pendingCount(){ return CANDS.filter(isPending).length; }
+var NEED_IN = 2, NEED_OUT = 2;
+function proceededCount(){ return CANDS.filter(function(c){ var d = decOf(c); return d && d.act === 'proceed'; }).length; }
+function rejectedCount(){ return CANDS.filter(isRejected).length; }
+function shortlistDone(){ return proceededCount() >= NEED_IN && rejectedCount() >= NEED_OUT; }
 function slotCheckList(){ return state.invite ? [] : CANDS.filter(isInterview); }
 function actionsCount(){ return pendingCount() + (state.phase === 'slots' ? slotCheckList().length : 0); }
 
@@ -1520,6 +1606,10 @@ function inTab(c, k){
   if(k === 'slot') return state.phase === 'slots' && isInterview(c) && !state.invite;
   return false;
 }
+function outForms(c){
+  var f = isPending(c) ? 'Shortlisting Form' : (state.phase === 'slots' && isInterview(c) && !state.invite ? 'HM Slot Confirmation Form' : '');
+  return f ? '<div class="opop"><b>Outstanding Forms for '+esc(c.first)+'</b><span>'+f+'</span></div>' : '';
+}
 function stageOf(c){
   if(isPending(c)) return ['Manager Shortlist','started 6 days ago'];
   if(isInterview(c)) return ['Select 1st Interview','started just now'];
@@ -1538,9 +1628,9 @@ function goList(tab){
   var n = pendingCount();
   var line;
   if(state.phase === 'sift') line = n === CANDS.length
-      ? 'Eight applicants. Read each one against the role profile and make a decision on every one. Hover the icons beside a name to see what Reach is flagging.'
-      : n + (n === 1 ? ' applicant still needs' : ' applicants still need') + ' a decision.';
-  else if(state.phase === 'slots') line = 'Every applicant has a decision. Now set up first interviews for one of the people you shortlisted. Start from <b>Manager Interview Slot Check</b>.';
+      ? 'Six applicants and room to interview two. Read them against the role profile, put two through and reject two. The other two wait until after the interviews. Hover the icons beside a name to see what Reach is flagging.'
+      : 'Through to interview: <b>' + proceededCount() + ' of ' + NEED_IN + '</b>. Rejected: <b>' + rejectedCount() + ' of ' + NEED_OUT + '</b>.';
+  else if(state.phase === 'slots') line = 'Part 2. Open the <b>Manager Interview Slot Check</b> tab, then <b>You &rarr;</b> on the one you are inviting.';
   else line = 'All done.';
   show('s-list', line);
 }
@@ -1559,7 +1649,7 @@ function renderList(){
       '<div class="c-flags">'+flagIcons(c)+'</div>'+
       '<div class="c-vac">'+esc(V.title)+'<small>'+V.id+' - '+esc(V.loc)+'</small></div>'+
       '<div class="c-loc">'+esc(c.town)+'</div>'+
-      '<div class="c-stage">'+st[0]+'<small>'+st[1]+'</small></div>'+
+      '<div class="c-stage">'+st[0]+'<small>'+st[1]+'</small>'+outForms(c)+'</div>'+
       '<div class="c-act"><button class="btn-you" data-you="'+c.key+'">You &#8594;</button></div>'+
       '<div class="c-cog"><span class="btn-cog">'+sv(ICON.cog)+' &#9662;</span><div class="cogmenu"><div data-cog="cv">Download CV</div><div data-cog="comments">Candidate Comments</div><hr><div data-cog="withdraw">Withdraw Candidate</div></div></div>'+
     '</div>';
@@ -1569,7 +1659,7 @@ $('clTabs').addEventListener('click', function(e){
   var t = e.target.closest('[data-tab]'); if(!t) return;
   e.stopPropagation();
   state.tab = t.getAttribute('data-tab'); renderList();
-  if(state.phase === 'slots' && state.tab === 'slot') coach('Here they are. Use <b>You &rarr;</b> on the person you want to invite first.');
+  if(state.phase === 'slots' && state.tab === 'slot') coach('Here they are. Use <b>You &rarr;</b> on the one you are inviting.');
 });
 $('clRows').addEventListener('click', function(e){
   var row = e.target.closest('.cl-row'); if(!row) return;
@@ -1694,6 +1784,8 @@ function submitShortlist(){
   var c = BYKEY[state.cur], f = draft(c);
   f.comment = $('fComment').value.trim();
   if(!f.act) return badSel('fAct', 'Start with the first question: <b>how would you like to progress</b> this application?');
+  if(f.act === D.progress[0] && proceededCount() >= NEED_IN) return msg('You already have your two for interview. Leave ' + esc(shown(c)) + ' where they are, at Manager Shortlist. If one of your two drops out, this is who you come back to.', 'Leave this one on hold');
+  if(f.act === D.progress[1] && rejectedCount() >= NEED_OUT) return msg('You have rejected two already. Leave ' + esc(shown(c)) + ' on hold until after the interviews, rather than closing the door now.', 'Leave this one on hold');
   if(f.comment.length < 15){ $('fComment').classList.add('inp','bad'); return wrong('Reach will not take the form without a <b>comment for internal use</b>. One line: why this decision, against the role. Write it so you would be content for '+esc(shown(c))+' to read it.'); }
   if(f.act === D.progress[1]){
     if(!f.reason) return badSel('fReason', 'Choose a <b>Rejection Reason</b>.');
@@ -1701,6 +1793,7 @@ function submitShortlist(){
     if(!f.talent) return badSel('fTalent', 'Answer the <b>talent bank</b> question. Would this person be worth contacting about a future vacancy?');
   } else {
     if(!f.next) return badSel('fNext', 'Confirm <b>how you would like to proceed</b>: a Teams meeting or a first interview.');
+    if(f.next === 'Proceed to Teams Meeting' && proceededCount() === NEED_IN - 1 && !CANDS.some(isInterview)) return msg('Part 2 sets up a face to face first interview, so at least one of your two needs to go straight through. Choose <b>Proceed to 1st Interview</b> for this one.', 'One needs a 1st interview');
     if(f.next === 'Proceed to Teams Meeting'){
       if(!f.tdate) return wrong('The Teams meeting needs a <b>date</b>.');
       if(new Date(f.tdate + 'T00:00:00') <= TODAY) return wrong('The Teams meeting needs to be in the future.');
@@ -1720,7 +1813,7 @@ function commit(c, f){
   else { d.next = f.next; if(f.next === 'Proceed to Teams Meeting') d.teams = {date:f.tdate, time:f.th+':'+f.tm, who:f.twho, title:f.ttitle}; }
   state.dec[c.key] = d;
   sfx('done');
-  if(pendingCount() === 0) return allDecided();
+  if(state.phase === 'sift' && shortlistDone()) return allDecided();
   if(state.perform){ var p = firstPending(); if(p) return openCand(p.key, 'overview'); }
   goList();
 }
@@ -1747,17 +1840,20 @@ function allDecided(){
   state.perform = false;
   var inv = CANDS.filter(isInterview).length, tm = CANDS.filter(isTeams).length, rej = CANDS.filter(isRejected).length;
   var through = inv + tm;
-  var line = 'You have put <b>' + inv + '</b> through to a first interview' + (tm ? ', <b>' + tm + '</b> to a Teams meeting' : '') + ' and rejected <b>' + rej + '</b>.';
-  if(through !== 4) line += '<br><br>Your brief had room for four. You have ' + through + '. Is that a problem, or the right call? Talk about it before you move on.';
+  var hold = pendingCount();
+  var line = 'You have put <b>' + inv + '</b> through to a first interview' + (tm ? ', <b>' + tm + '</b> to a Teams meeting' : '') + ' and rejected <b>' + rej + '</b>.' +
+    ' The other <b>' + hold + '</b> stay at Manager Shortlist until after the interviews. If one of your two drops out, they are who you come back to.';
   if(!inv){
     state.phase = 'done';
     finish();
-    return msg(line + '<br><br>Nobody is going to a first interview, so there are no slots to set up.', 'Every applicant has a decision', true);
+    return msg(line + '<br><br>Nobody is going to a first interview, so there are no slots to set up.', 'Your shortlist is set', true);
   }
-  state.phase = 'slots'; state.tab = 'slot';
-  goList('slot');
-  msg(line + '<br><br>Next, set up interview slots for one of the people going to a first interview.', 'Every applicant has a decision', true);
+  state.phase = 'slots'; state.tab = 'all';
+  $('p2Line').innerHTML = line;
+  show('s-part2');
 }
+
+$('btnPart2').addEventListener('click', function(){ goList('all'); });
 
 /* ---------- HM slot confirmation form ---------- */
 function slotDraft(){ return state.sdraft || (state.sdraft = {confirm:false, type:'', info:''}); }
@@ -1777,7 +1873,7 @@ function renderSlotForm(c){
   buildSelect($('fType'), D.confirmTypes, function(v){ s.type = v; }, null, s.type);
   $('fConfirm').addEventListener('change', function(){ s.confirm = this.checked; });
   $('fInfo').addEventListener('input', function(){ s.info = this.value; });
-  $('btnCreateSlots').addEventListener('click', function(){ goSSL(); });
+  $('btnCreateSlots').addEventListener('click', function(){ state.sslFiltered = true; state.t2 = 's-ssl'; goSSL(); });
   $('btnSaveLater2').addEventListener('click', function(){ wrong('<b>Save for later</b> parks the form. Nothing reaches the candidate until you submit.'); });
   $('btnSubmitSlot').addEventListener('click', submitSlotForm);
 }
@@ -1803,16 +1899,17 @@ function submitSlotForm(){
 /* ---------- self select slots ---------- */
 function goSSL(){
   var n = state.slots.length;
+  $('s-ssl').classList.toggle('unfiltered', !state.sslFiltered);
   $('ss-created').textContent = n; $('ss-free').textContent = n; $('ss-bookable').textContent = n;
   each('#s-ssl .ss-tab td.n', function(td){ td.style.color = n ? '#3d6fa0' : ''; });
-  show('s-ssl', n ? 'Your slots are saved. Now go back to ' + esc(shown(BYKEY[state.slotCand])) + '\'s form to send the invitation.'
-                  : 'Slots are set up per vacancy, and each candidate you invite picks one. <b>Edit</b> the slots for your Project Coordinator vacancy.');
+  show('s-ssl', n ? 'Your slots are saved. Click the first tab at the top to go back to ' + esc(shown(BYKEY[state.slotCand])) + '\'s form and send the invitation.'
+                  : 'Reach has opened this in a new tab. Slots are set up per vacancy, and each candidate you invite picks one. <b>Edit</b> the slots for your Project Coordinator vacancy.');
 }
 $('btnSlotEdit').addEventListener('click', goSlots);
 function goSlots(){
   renderSlots();
-  show('s-slots', state.slots.length ? 'Slots saved. <b>Return to listing</b> when you are happy with them.'
-                                     : 'Add at least two interview times so ' + esc(shown(BYKEY[state.slotCand])) + ' has a choice. Two interviewers on the panel.');
+  show('s-slots', state.slots.length ? 'Slots saved. Click the first tab at the top to go back to ' + esc(shown(BYKEY[state.slotCand])) + '\'s form.'
+                                     : 'Use <b>+ Add Slot</b> to give ' + esc(shown(BYKEY[state.slotCand])) + ' four 30 minute slots to choose from.');
 }
 function slotWhen(s){
   var d = new Date(s.date + 'T00:00:00');
@@ -1829,13 +1926,14 @@ $('slRows').addEventListener('click', function(e){
   else if(e.target.closest('.slot-edit')) wrong('Your slots look fine as they are. Nothing to change.');
 });
 $('btnAddSlot').addEventListener('click', openAdd);
-$('btnSlotReturn').addEventListener('click', goSSL);
+$('btnSlotReturn').addEventListener('click', function(){ state.sslFiltered = false; goSSL(); });
 
 /* ---------- add slot modal ---------- */
 var A2 = null;
 function openAdd(){
+  if(state.slots.length >= 4) return wrong('You already have your four slots. <b>Return to listing</b> and go back to ' + esc(shown(BYKEY[state.slotCand])) + '\'s form.');
   A2 = {date:'', times:[{h:'09',m:'00',ap:'AM'}], len:'', venue:'', lead:'', add:[], num:''};
-  $('slDate').value = ''; $('slDate').min = isoDate(new Date(TODAY.getTime()+864e5));
+  $('slDate').value = ''; $('slDate').dataset.iso = ''; $('slCal').classList.remove('show');
   $('slInfo').className = ''; $('slInfo').innerHTML = 'Please complete the form on the left. All fields are required.<br><br>Any error messages or conflicting interview slots will appear here once you have clicked "Create Interview Slot"';
   renderTimes();
   buildSelect($('slLen'), D.lengths, function(v){ A2.len = v; }, 'Please select');
@@ -1844,7 +1942,7 @@ function openAdd(){
   buildSelect($('slNum'), D.interviewNumbers, function(v){ A2.num = v; }, 'Please select');
   renderChips();
   $('addWrap').classList.add('show');
-  coach('Fill in every field. Add a second time with <b>Add Another</b>, and put a second interviewer on the panel.');
+  coach('One date, then <b>Add Another</b> until there are four times. 30 minutes each, at the Chorley Office, with you on the panel.');
 }
 var HOURS12 = ['01','02','03','04','05','06','07','08','09','10','11','12'];
 var MINS5 = ['00','05','10','15','20','25','30','35','40','45','50','55'];
@@ -1899,12 +1997,42 @@ $('slAdd').addEventListener('click', function(e){
   e.stopPropagation(); var inp = this.querySelector('.srch2'); if(inp) inp.focus();
 });
 function infoBad(html){ sfx('error'); $('slInfo').className = 'bad'; $('slInfo').innerHTML = html; }
-function closeAdd(){ $('addWrap').classList.remove('show'); coach(state.slots.length ? 'Slots saved. <b>Return to listing</b> when you are happy with them.' : 'Use <b>+ Add Slot</b> to create your interview times.'); }
+function closeAdd(){ $('addWrap').classList.remove('show'); coach(state.slots.length ? 'Slots saved. Click the first tab at the top to go back to ' + esc(shown(BYKEY[state.slotCand])) + '\'s form.' : 'Use <b>+ Add Slot</b> to create your interview times.'); }
 $('btnAddX').addEventListener('click', closeAdd);
 $('btnAddCancel').addEventListener('click', closeAdd);
 $('addBox').addEventListener('click', function(e){ if(!e.target.closest('.sel, .chipbox')) closeAll(); e.stopPropagation(); });
+
+/* ---------- Reach date picker: future dates only, as component_future_datepicker ---------- */
+var DP = {y:0, m:0};
+function dpOpen(){
+  var iso = $('slDate').dataset.iso, base = iso ? new Date(iso + 'T00:00:00') : new Date(TODAY.getTime());
+  DP.y = base.getFullYear(); DP.m = base.getMonth(); dpRender(); $('slCal').classList.add('show');
+}
+function dpRender(){
+  var first = new Date(DP.y, DP.m, 1), sel = $('slDate').dataset.iso || '';
+  var h = '<div class="hd"><b data-dpn="-1">&laquo;</b><span>' + MONTHS[DP.m] + ' ' + DP.y + '</span><b data-dpn="1">&raquo;</b></div><table><tr>' +
+    ['Su','Mo','Tu','We','Th','Fr','Sa'].map(function(d){ return '<th>'+d+'</th>'; }).join('') + '</tr>';
+  for(var w = 0; w < 6; w++){
+    h += '<tr>';
+    for(var i = 0; i < 7; i++){
+      var d = new Date(DP.y, DP.m, 1 - first.getDay() + w*7 + i), iso = isoDate(d), off = d.getMonth() !== DP.m || d <= TODAY;
+      h += '<td class="'+(off?'off':'')+(iso === sel ? ' sel' : '')+'"'+(off ? '' : ' data-dpd="'+iso+'"')+'>'+d.getDate()+'</td>';
+    }
+    h += '</tr>';
+  }
+  $('slCal').innerHTML = h + '</table><div class="clr" data-dpc="1">Clear</div>';
+}
+$('slDate').addEventListener('click', function(e){ e.stopPropagation(); var was = $('slCal').classList.contains('show'); closeAll(); if(!was) dpOpen(); });
+$('slCal').addEventListener('click', function(e){
+  e.stopPropagation();
+  var n = e.target.closest('[data-dpn]'), d = e.target.closest('[data-dpd]');
+  if(n){ DP.m += +n.getAttribute('data-dpn'); if(DP.m < 0){ DP.m = 11; DP.y--; } if(DP.m > 11){ DP.m = 0; DP.y++; } return dpRender(); }
+  if(e.target.closest('[data-dpc]')){ $('slDate').value = ''; $('slDate').dataset.iso = ''; return dpRender(); }
+  if(d){ var iso = d.getAttribute('data-dpd'), p = iso.split('-'); $('slDate').value = p[2] + '/' + p[1] + '/' + p[0]; $('slDate').dataset.iso = iso; $('slCal').classList.remove('show'); sfx('pick'); }
+});
+$('btnAddPop').addEventListener('click', function(e){ e.stopPropagation(); wrong('That opens this same form in a new tab. You can fill it in right here.'); });
 $('btnCreateSlot').addEventListener('click', function(){
-  A2.date = $('slDate').value;
+  A2.date = $('slDate').dataset.iso || '';
   var missing = [];
   if(!A2.date) missing.push('Interview Date');
   if(!A2.len) missing.push('Interview Length');
@@ -1916,17 +2044,21 @@ $('btnCreateSlot').addEventListener('click', function(){
   if(new Date(A2.date + 'T00:00:00') <= TODAY) return infoBad('The interview date must be in the future.');
   var keys = A2.times.map(function(t){ return mins(t); });
   if(keys.some(function(k,i){ return keys.indexOf(k) !== i; })) return infoBad('Two of your interview times are the same.');
+  var nm = esc(shown(BYKEY[state.slotCand]));
+  if(A2.times.length < 4) return wrong('You have ' + A2.times.length + (A2.times.length === 1 ? ' time' : ' times') + '. The brief is <b>four</b>, so ' + nm + ' has a real choice. Use <b>Add Another</b> until there are four.');
+  if(A2.times.length > 4) return wrong('That is ' + A2.times.length + ' times. The brief is <b>four</b>. Take the extra off with the red cross.');
+  if(A2.len !== '30 Minutes') return wrong('Each slot is <b>30 minutes</b>. Change the <b>Interview Length</b>.');
+  if(A2.venue !== 'Chorley Office') return wrong('This is a face to face interview at the <b>Chorley Office</b>. Change the <b>Venue</b>.');
   var sorted = keys.slice().sort(function(a,b){ return a-b; }), L = lenMins(A2.len);
   for(var i=1;i<sorted.length;i++) if(sorted[i] - sorted[i-1] < L) return infoBad('Conflicting interview slots: with a ' + A2.len.toLowerCase() + ' interview, these times overlap. Space them out.');
   var ok = A2.lead === state.name || A2.add.indexOf(state.name) > -1;
   if(!ok) return wrong('You are the hiring manager for this role, but you are not on your own panel. Add <b>' + esc(state.name) + '</b> as lead or additional interviewer.');
   if(A2.num !== '1st Interview') return wrong('These are <b>first</b> interviews. Nobody has had a first interview yet.');
-  if(A2.times.length < 2) return wrong('One time gives ' + esc(shown(BYKEY[state.slotCand])) + ' no choice at all. Use <b>Add Another</b> so there are at least two to pick from.');
   A2.times.forEach(function(t){ state.slots.push({date:A2.date, h:t.h, m:t.m, ap:t.ap, k:mins(t), len:A2.len, venue:A2.venue, lead:A2.lead, add:A2.add.slice(), num:A2.num}); });
   state.slots.sort(function(a,b){ return a.date === b.date ? a.k - b.k : (a.date < b.date ? -1 : 1); });
   $('addWrap').classList.remove('show');
   sfx('done'); renderSlots(); armHints();
-  coach('Slots saved. <b>Return to listing</b>, then go back to ' + esc(shown(BYKEY[state.slotCand])) + '\'s form to send the invitation.');
+  coach('Slots saved. Click the first tab at the top to go back to ' + esc(shown(BYKEY[state.slotCand])) + '\'s form and send the invitation.');
 });
 
 /* ---------- rail and top icons ---------- */
@@ -1934,6 +2066,7 @@ document.addEventListener('click', function(e){
   if($('addWrap').classList.contains('show') || $('thinkWrap').classList.contains('show')) return;
   var g = e.target.closest('[data-rail-go]');
   if(g){
+    if(T2.indexOf(curScreen()) > -1 && state.slotCand) return wrong('<b>' + esc(shown(BYKEY[state.slotCand])) + '</b>\'s form is still open in the first tab at the top. Click that tab to go back to it.');
     var k = g.getAttribute('data-rail-go');
     if(k === 'dash') return goDash();
     state.perform = false;
@@ -1944,7 +2077,7 @@ document.addEventListener('click', function(e){
   if(e.target.closest('.rx-ic')) return wrong('Those are search, notifications, announcements and help. Nothing you need here.');
   if(e.target.closest('.cl-bar .flt')) return wrong('The filters narrow the list. You have one vacancy, so everyone is already here.');
   if(e.target.closest('.tab.sel2')) return wrong('The tabs already split the list by stage. No need to pick one here.');
-  if(e.target.closest('.c-chk')) return wrong('Ticking boxes is for bulk actions. Every applicant here needs their own decision.');
+  if(e.target.closest('.c-chk')) return wrong('Ticking boxes is for bulk actions. Each applicant here gets their own decision.');
   if(e.target.closest('.toggle') && !e.target.closest('.cm-bar')) return wrong('That toggle filters what you see. You do not need it right now.');
 });
 
@@ -2074,13 +2207,14 @@ document.addEventListener('click', function(e){
 function finish(){
   var inv = CANDS.filter(isInterview).length, tm = CANDS.filter(isTeams).length;
   var ic = state.invite ? BYKEY[state.invite.key] : null;
-  $('finLine').innerHTML = 'You shortlisted <b>' + inv + '</b> of eight for a first interview' + (tm ? ' and <b>' + tm + '</b> for a Teams meeting' : '') + '.' +
+  $('finLine').innerHTML = 'You shortlisted <b>' + inv + '</b> of six for a first interview' + (tm ? ' and <b>' + tm + '</b> for a Teams meeting' : '') + '.' +
     (ic ? ' ' + esc(shown(ic)) + ' has been invited to choose from <b>' + state.slots.length + '</b> slots.' : '') +
     ' Here is every decision and the reason on record.';
-  $('fin-slots').textContent = state.slots.length ? state.slots.length + ' slots for your first interviews' : 'Not needed this time';
+  $('fin-slots').textContent = state.slots.length ? state.slots.length + ' slots, 30 minutes each' : 'Not needed this time';
   $('fin-inv').textContent = ic ? shown(ic) + ' picks a slot' : 'Not needed this time';
   $('sumRows').innerHTML = CANDS.map(function(c){
     var d = decOf(c) || {};
+    if(!d.act) return '<tr><td class="nm">'+esc(full(c))+'</td><td><div class="fls">'+flagIcons(c)+'</div></td><td><span class="dec hold">On hold</span></td><td>Still at Manager Shortlist, until after the interviews.</td></tr>';
     var pill = d.act === 'reject' ? '<span class="dec no">Rejected</span>' : (d.next === 'Proceed to Teams Meeting' ? '<span class="dec tm">Teams meeting</span>' : '<span class="dec yes">1st interview</span>');
     var why = d.act === 'reject' ? '<b>' + esc(d.reason) + (d.other ? ': ' + esc(d.other.replace(/[.\s]+$/,'')) : '') + '.</b> ' : '';
     return '<tr><td class="nm">'+esc(full(c))+'</td><td><div class="fls">'+flagIcons(c)+'</div></td><td>'+pill+'</td><td>'+why+'<span class="cm">"'+esc(d.comment || '')+'"</span></td></tr>';
