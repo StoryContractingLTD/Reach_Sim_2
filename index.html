@@ -733,6 +733,25 @@ input.inp[type=date]{color:#3d4750}
 .dec.no{background:#fbe4e0;color:#a33a26}
 .dec.tm{background:#e3eefb;color:#2f5f96}
 .dec.hold{background:#fdf1d8;color:#8a5a00}
+.cl-row.seen .c-name b::before{background:#7b93e6}
+/* ---- Show me pointer ---- */
+#coach .showme{margin-right:8px}
+#demoCur{position:absolute;left:800px;top:450px;width:0;height:0;z-index:9999;pointer-events:none;opacity:0;
+  transition:left .9s cubic-bezier(.45,.05,.3,1),top .9s cubic-bezier(.45,.05,.3,1),opacity .25s}
+#demoCur.on{opacity:1}
+#demoCur svg{position:absolute;left:-4px;top:-3px;width:28px;height:28px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));transform-origin:4px 3px;transition:transform .12s}
+#demoCur.click svg{transform:scale(.82)}
+#demoCur .ring{position:absolute;left:-20px;top:-20px;width:40px;height:40px;border-radius:50%;border:3px solid #93c83e;opacity:0}
+#demoCur.click .ring{animation:dcRing .75s ease-out 2}
+@keyframes dcRing{0%{transform:scale(.3);opacity:1}100%{transform:scale(1.7);opacity:0}}
+#demoCur .lbl{position:absolute;left:26px;top:22px;background:#2f3c46;color:#fff;font-size:14px;font-weight:600;padding:6px 12px;border-radius:7px;
+  white-space:nowrap;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#demoCur .lbl b{color:#b4e83c;font-weight:700}
+#demoCur.flip .lbl{left:auto;right:18px}
+#demoCur.click .lbl{opacity:1;transform:none}
+#demoCur .caret{position:absolute;left:8px;top:-9px;width:2px;height:18px;background:#2f3c46;opacity:0}
+#demoCur.typing .caret{animation:dcBlink .5s steps(1) 6}
+@keyframes dcBlink{0%{opacity:1}50%{opacity:0}}
 html,body{font-family:"Mona Sans","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
 /* ---- browser tabs ---- */
 .tabstrip{height:34px;flex:0 0 34px;background:#dfe3e8;display:flex;align-items:flex-end;padding:0 10px;gap:2px}
@@ -805,7 +824,7 @@ html,body{font-family:"Mona Sans","Segoe UI",system-ui,-apple-system,Roboto,Aria
           <div class="step"><span class="dot"></span><span>Put two through and reject two, each with a reason. The other two wait</span></div>
           <div class="step"><span class="dot"></span><span>Part 2: set up one interview, with four slots to choose from</span></div>
         </div>
-        <p>Nothing you do here touches the live system. Keep your process sheet next to the laptop and work through it together.</p>
+        <p>Nothing you do here touches the live system. Stuck at any point? Press <b>Ctrl+H</b> and the sim will show you what to do next.</p>
       </div>
       <div class="wel-right">
         <img class="logo" id="wel-logo" alt="Reach">
@@ -1080,7 +1099,7 @@ html,body{font-family:"Mona Sans","Segoe UI",system-ui,-apple-system,Roboto,Aria
 <div id="coach" style="display:none">
   <span class="ic">i</span>
   <span class="txt" id="coachTxt"></span>
-  <button class="restart" id="btnRestart">Restart</button>
+  <button class="restart showme" id="btnShowMe">Show me (Ctrl+H)</button><button class="restart" id="btnRestart">Restart</button>
 </div>
 </div></div>
 
@@ -1565,7 +1584,7 @@ function proceededCount(){ return CANDS.filter(function(c){ var d = decOf(c); re
 function rejectedCount(){ return CANDS.filter(isRejected).length; }
 function shortlistDone(){ return proceededCount() >= NEED_IN && rejectedCount() >= NEED_OUT; }
 function slotCheckList(){ return state.invite ? [] : CANDS.filter(isInterview); }
-function actionsCount(){ return pendingCount() + (state.phase === 'slots' ? slotCheckList().length : 0); }
+function actionsCount(){ return pendingCount() + slotCheckList().length; }
 
 /* ---------- dashboard ---------- */
 function goDash(){
@@ -1594,20 +1613,20 @@ var TABS = [
   {k:'hr', l:'HR Stages', ic:'&#9786;', n:function(){ return 0; }},
   {k:'screen', l:'Manager Screening Decision', ic:'&#9636;', wide:1, n:function(){ return pendingCount(); }},
   {k:'tele', l:'Manager Telescreen', ic:'&#9990;', wide:1, n:function(){ return CANDS.filter(isTeams).length; }},
-  {k:'slot', l:'Manager Interview Slot Check', ic:'&#9787;', wide:1, n:function(){ return state.phase === 'slots' ? slotCheckList().length : 0; }},
+  {k:'slot', l:'Manager Interview Slot Check', ic:'&#9787;', wide:1, n:function(){ return slotCheckList().length; }},
   {k:'idec', l:'Manager Interview Decision', ic:'&#9787;', wide:1, n:function(){ return 0; }}
 ];
 function inTab(c, k){
   if(isRejected(c)) return false;
   if(k === 'all') return true;
-  if(k === 'mine') return isPending(c) || (state.phase === 'slots' && isInterview(c) && !state.invite);
+  if(k === 'mine') return isPending(c) || (isInterview(c) && !state.invite);
   if(k === 'screen') return isPending(c);
   if(k === 'tele') return isTeams(c);
-  if(k === 'slot') return state.phase === 'slots' && isInterview(c) && !state.invite;
+  if(k === 'slot') return isInterview(c) && !state.invite;
   return false;
 }
 function outForms(c){
-  var f = isPending(c) ? 'Shortlisting Form' : (state.phase === 'slots' && isInterview(c) && !state.invite ? 'HM Slot Confirmation Form' : '');
+  var f = isPending(c) ? 'Shortlisting Form' : (isInterview(c) && !state.invite ? 'HM Slot Confirmation Form' : '');
   return f ? '<div class="opop"><b>Outstanding Forms for '+esc(c.first)+'</b><span>'+f+'</span></div>' : '';
 }
 function stageOf(c){
@@ -1635,14 +1654,14 @@ function goList(tab){
   show('s-list', line);
 }
 function renderList(){
-  $('cl-total').textContent = active().length;
   $('clTabs').innerHTML = TABS.map(function(t){
     return '<div class="tab'+(t.wide?' wide':'')+(state.tab===t.k?' on':'')+'" data-tab="'+t.k+'"><span>'+t.ic+'</span>'+esc(t.l)+' <span class="n">'+t.n()+'</span></div>';
   }).join('') + '<div class="tab sel2">Select Stage &#9662;</div>';
   var rows = CANDS.filter(function(c){ return inTab(c, state.tab); });
+  $('cl-total').textContent = rows.length;
   $('clRows').innerHTML = rows.length ? rows.map(function(c){
     var st = stageOf(c);
-    return '<div class="cl-row" data-key="'+c.key+'">'+
+    return '<div class="cl-row'+(state.viewed.indexOf(c.key) > -1 ? ' seen' : '')+'" data-key="'+c.key+'">'+
       '<div class="c-chk"><span></span></div>'+
       '<div class="c-btns"><i data-open="overview" title="View candidate details">'+sv(ICON.card)+'</i><i data-open="appform" title="View application form">'+sv(ICON.doc)+'</i><i data-open="cv" title="Download CV">'+sv(ICON.dl)+'</i></div>'+
       '<div class="c-name" data-open="overview"><b>'+esc(full(c))+'</b><small>'+c.appId+'</small></div>'+
@@ -1705,7 +1724,8 @@ function openCand(key, pane){
       ? 'Slots are in. Confirm them, choose the type of invitation and add anything ' + esc(shown(c)) + ' needs to know.'
       : 'Before ' + esc(shown(c)) + ' can be invited, there need to be interview slots to choose from.';
   else if(isPending(c)) line = 'Read the application and CV against the role profile in <b>Job Files</b>. Then complete the Shortlisting Form on the left.';
-  else line = 'You have already made a decision on ' + esc(shown(c)) + '.';
+  else line = (state.phase === 'sift' && isInterview(c)) ? esc(shown(c)) + ' is through to interview. Finish your shortlist first. You set up the interview in Part 2.'
+                                                     : 'You have already made a decision on ' + esc(shown(c)) + '.';
   show('s-cand', line);
 }
 function renderTabs(){
@@ -2221,6 +2241,98 @@ function finish(){
   }).join('');
   show('s-finish');
 }
+
+
+/* ---------- Show me: press H to see exactly what to do next ---------- */
+function nextStep(){
+  var id = curScreen(), c = BYKEY[state.cur];
+  if($('msgWrap').classList.contains('show')) return {el:'#msgOk'};
+  if($('thinkWrap').classList.contains('show')) return {el:'#thinkGo'};
+  if(id === 's-welcome') return $('nameInput').value.trim() ? {el:'#btnStart'} : {el:'#nameInput', say:'Type your name', type:1};
+  if(id === 's-part2') return {el:'#btnPart2'};
+  if(id === 's-dash') return {el:'#btnVacName', say:'Click the vacancy name'};
+  if(id === 's-list'){
+    if(state.phase === 'sift'){ var p = firstPending(); return p ? {el:'[data-you="'+p.key+'"]'} : null; }
+    if(state.phase === 'slots'){
+      if(state.tab !== 'slot') return {el:'[data-tab="slot"]'};
+      var k = state.slotCand || (slotCheckList()[0] || {}).key; return k ? {el:'[data-you="'+k+'"]'} : null;
+    }
+    return null;
+  }
+  if(id === 's-cand' && c){
+    if(isSlotMode(c)){
+      if(!state.slots.length) return {el:'#btnCreateSlots'};
+      var s = slotDraft();
+      if(!$('fConfirm').checked) return {el:'#fConfirm', say:'Tick this'};
+      if(!s.type) return {el:'#fType', say:'Choose <b>Face to Face</b>'};
+      if(!$('fInfo').value.trim()) return {el:'#fInfo', say:'Type a short message for them', type:1};
+      return {el:'#btnSubmitSlot'};
+    }
+    if(isPending(c)){
+      var f = draft(c);
+      if(!f.act) return {el:'#fAct', say:'Choose <b>proceed</b> or <b>reject</b>'};
+      if(f.act === D.progress[1]){
+        if(!f.reason) return {el:'#fReason', say:'Choose a reason'};
+        if(!f.talent) return {el:'#fTalent', say:'Choose an answer'};
+      } else {
+        if(!f.next) return {el:'#fNext', say:'Choose <b>Proceed to 1st Interview</b>'};
+        if(f.next === 'Proceed to Teams Meeting' && !f.tdate) return {el:'#fTDate', say:'Fill in the Teams meeting details'};
+      }
+      if(!$('fComment').value.trim()) return {el:'#fComment', say:'Type a word or two', type:1};
+      return {el:'#btnSubmitSL'};
+    }
+    return {el:'#btnCandBack', say:'Go back to the list'};
+  }
+  if(id === 's-ssl') return state.slots.length ? {el:'#s-ssl .btab[data-t="1"]', say:'Click this tab to go back'} : {el:'#btnSlotEdit'};
+  if(id === 's-slots'){
+    if($('addWrap').classList.contains('show') && A2){
+      if(!$('slDate').dataset.iso) return {el:'#slDate', say:'Pick a date'};
+      if(A2.times.length < 4) return {el:'#btnAnother', say:'Click until there are <b>four</b> times'};
+      if(A2.len !== '30 Minutes') return {el:'#slLen', say:'Choose <b>30 Minutes</b>'};
+      if(A2.venue !== 'Chorley Office') return {el:'#slVenue', say:'Choose <b>Chorley Office</b>'};
+      if(!A2.lead) return {el:'#slLead', say:'Choose your own name'};
+      if(!A2.add.length) return {el:'#slAdd', say:'Type a colleague\'s name', type:1};
+      if(A2.num !== '1st Interview') return {el:'#slNum', say:'Choose <b>1st Interview</b>'};
+      return {el:'#btnCreateSlot'};
+    }
+    return state.slots.length ? {el:'#s-slots .btab[data-t="1"]', say:'Click this tab to go back'} : {el:'#btnAddSlot'};
+  }
+  return null;
+}
+var demoX = 800, demoY = 450, demoTimers = [];
+stage.addEventListener('mousemove', function(e){
+  var r = stage.getBoundingClientRect(), s = r.width / 1600;
+  demoX = (e.clientX - r.left) / s; demoY = (e.clientY - r.top) / s;
+});
+function showMe(){
+  var st = nextStep(); if(!st) return;
+  var el = document.querySelector(st.el); if(!el || !el.getClientRects().length) return;
+  try { el.scrollIntoView({block:'center', inline:'nearest'}); } catch(err){}
+  var cur = $('demoCur');
+  if(!cur){
+    cur = document.createElement('div'); cur.id = 'demoCur';
+    cur.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 2l15 11.5-6.6 1 3.9 7.3-2.7 1.4-3.9-7.4L4 20z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>' +
+                    '<span class="ring"></span><span class="caret"></span><span class="lbl"></span>';
+    stage.appendChild(cur);
+  }
+  demoTimers.forEach(clearTimeout); demoTimers = [];
+  var sr = stage.getBoundingClientRect(), s = sr.width / 1600, r = el.getBoundingClientRect();
+  var x = (r.left - sr.left) / s + Math.min(r.width / s / 2, 70), y = (r.top - sr.top) / s + r.height / s / 2;
+  cur.className = ''; cur.style.transition = 'none'; cur.style.left = demoX + 'px'; cur.style.top = demoY + 'px';
+  void cur.offsetWidth; cur.style.transition = '';
+  cur.querySelector('.lbl').innerHTML = (st.say || 'Click') + ' &nbsp;&middot;&nbsp; <b>now you do it</b>';
+  cur.classList.add('on'); if(x > 1250) cur.classList.add('flip');
+  cur.style.left = x + 'px'; cur.style.top = y + 'px';
+  sfx('nav');
+  demoTimers.push(setTimeout(function(){ cur.classList.add('click'); if(st.type) cur.classList.add('typing'); sfx('pick'); }, 950));
+  demoTimers.push(setTimeout(function(){ cur.classList.remove('on'); }, 3600));
+  demoTimers.push(setTimeout(function(){ cur.className = ''; }, 3900));
+}
+document.addEventListener('keydown', function(e){
+  if(!(e.ctrlKey || e.metaKey) || (e.key !== 'h' && e.key !== 'H')) return;
+  e.preventDefault(); e.stopPropagation(); showMe();
+});
+$('btnShowMe').addEventListener('click', function(e){ e.stopPropagation(); showMe(); });
 
 /* ---------- restart ---------- */
 function restart(){
