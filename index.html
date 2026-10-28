@@ -1168,7 +1168,7 @@ think: {
   ra:    {h:'Requires reasonable adjustments', t:'This is not a reason to sift anyone in or out. It is a legal duty under the Equality Act 2010. If {n} goes through, when will you act on it, and how will you find out what they need?'},
   conv:  {h:'Criminal conviction', t:'Does a conviction on the form, on its own, rule {n} out of this role? What would you need to know before deciding, and who would you ask?'},
   /* used instead of 'dbs' when the candidate has also declared a conviction */
-  dbsconv:{h:'Will not agree to a Basic DBS check', t:'{n} has declared a criminal conviction. Where there is a conviction, a Basic DBS check is mandatory, and an interview will not be given without one. As things stand, {n} cannot go through to interview.'},
+  dbsconv:{h:'Will not agree to a Basic DBS check', t:'{n} has declared a criminal conviction. Where there is a conviction, a Basic DBS check is mandatory. Unless you gain {n}\'s agreement to complete a DBS check, they will not go to interview.'},
   dbs:   {h:'Will not agree to a Basic DBS check', t:'A Basic DBS check is one of the pre-employment checks for Story England. Is that something you decide now, from a tick box, or something to talk through with the People Team first?'},
   da:    {h:'Objected to drugs and alcohol testing', t:'Drug and alcohol testing is part of Story\'s pre-employment checks. Do you know why {n} objected? Does it change your decision today, and who would you check with?'},
   ref:   {h:'Referred by a colleague', t:'A recommendation from someone you know. Does it make {n} a better fit for the role, or just a more familiar name? Would you make the same decision without it?'},
@@ -1480,7 +1480,9 @@ function wrong(html){
   }
   msg(html);
 }
-function msg(html, title, warm){
+var msgAfter = null;
+function msg(html, title, warm, after){
+  msgAfter = after || null;
   $('msgTitle').textContent = title || 'Not quite';
   $('msgBox').querySelector('.mh').style.background = warm ? '#5a9d18' : '';
   $('msgBox').querySelector('.mh .ic').style.color = warm ? '#5a9d18' : '';
@@ -1490,7 +1492,7 @@ function msg(html, title, warm){
   $('msgWrap').classList.add('show');
   $('msgOk').focus();
 }
-function closeMsg(){ $('msgWrap').classList.remove('show'); }
+function closeMsg(){ $('msgWrap').classList.remove('show'); var a = msgAfter; msgAfter = null; if(a) a(); }
 $('msgOk').addEventListener('click', closeMsg);
 $('msgWrap').addEventListener('click', function(e){ if(e.target.id === 'msgWrap') closeMsg(); });
 document.addEventListener('keydown', function(e){
@@ -1825,7 +1827,13 @@ function submitShortlist(){
       f.ttitle = $('fTTitle').value.trim();
     }
   }
-  thinkThen(c, c.flags, 'Before you submit', 'Reach is flagging something about ' + shown(c) + '. Stop and think it through before you decide.', function(){ commit(c, f); });
+  thinkThen(c, c.flags, 'Before you submit', 'Reach is flagging something about ' + shown(c) + '. Stop and think it through before you decide.', function(){
+    if(f.act === D.progress[0] && c.flags.indexOf('conv') > -1 && c.flags.indexOf('dbs') > -1){
+      sfx('error');
+      return msg('You have put <b>' + esc(shown(c)) + '</b> through. Unless you gain ' + esc(shown(c)) + '\'s agreement to complete a DBS check, they will not go to interview. Talk it through with them, and with your People Partner, before the interview goes ahead.', 'Before the interview', false, function(){ commit(c, f); });
+    }
+    commit(c, f);
+  });
 }
 function badSel(id, html){ var el = $(id); if(el) el.classList.add('bad'); wrong(html); }
 
