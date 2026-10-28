@@ -12,7 +12,7 @@ svg{pointer-events:none} /* clicks resolve to the parent, not the path */
 html,body{margin:0;padding:0;height:100%;background:#20262e;overflow:hidden;
   font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
 #fit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-#stage{width:1600px;height:900px;position:relative;transform-origin:center center;
+#stage{width:1600px;height:900px;flex:0 0 auto;position:relative;transform-origin:center center;
   background:#fff;overflow:hidden;box-shadow:0 10px 50px rgba(0,0,0,.5)}
 .screen{position:absolute;top:0;left:0;right:0;bottom:0;display:none;flex-direction:column;background:#fff}
 .screen.active{display:flex}
@@ -1167,6 +1167,8 @@ think: {
   mil:   {h:'Ex-military', t:'Story guarantees an interview to every Service leaver who applies. That is part of its Armed Forces Covenant commitment. What does that mean for your decision on {n}?'},
   ra:    {h:'Requires reasonable adjustments', t:'This is not a reason to sift anyone in or out. It is a legal duty under the Equality Act 2010. If {n} goes through, when will you act on it, and how will you find out what they need?'},
   conv:  {h:'Criminal conviction', t:'Does a conviction on the form, on its own, rule {n} out of this role? What would you need to know before deciding, and who would you ask?'},
+  /* used instead of 'dbs' when the candidate has also declared a conviction */
+  dbsconv:{h:'Will not agree to a Basic DBS check', t:'{n} has declared a criminal conviction. Where there is a conviction, a Basic DBS check is mandatory, and an interview will not be given without one. As things stand, {n} cannot go through to interview.'},
   dbs:   {h:'Will not agree to a Basic DBS check', t:'A Basic DBS check is one of the pre-employment checks for Story England. Is that something you decide now, from a tick box, or something to talk through with the People Team first?'},
   da:    {h:'Objected to drugs and alcohol testing', t:'Drug and alcohol testing is part of Story\'s pre-employment checks. Do you know why {n} objected? Does it change your decision today, and who would you check with?'},
   ref:   {h:'Referred by a colleague', t:'A recommendation from someone you know. Does it make {n} a better fit for the role, or just a more familiar name? Would you make the same decision without it?'},
@@ -1845,7 +1847,7 @@ function thinkThen(c, flags, title, sub, cb, bank){
   bank = bank || D.think;
   $('thinkTitle').textContent = title; $('thinkSub').textContent = sub;
   $('thinkBody').innerHTML = flags.map(function(f){
-    var t = bank[f];
+    var t = (bank === D.think && f === 'dbs' && flags.indexOf('conv') > -1) ? bank.dbsconv : bank[f];
     return '<div class="tk"><span class="fi">'+flagIcon(c, f, true)+'</span><div><b>'+esc(t.h)+'</b><span>'+esc(t.t.replace(/\{n\}/g, shown(c)).replace(/\{p\}/g, c.pref))+'</span></div></div>';
   }).join('');
   thinkCb = cb;
@@ -2301,13 +2303,14 @@ function nextStep(){
 }
 var demoX = 800, demoY = 450, demoTimers = [];
 stage.addEventListener('mousemove', function(e){
-  var r = stage.getBoundingClientRect(), s = r.width / 1600;
+  var r = stage.getBoundingClientRect(), s = r.width / stage.offsetWidth;
   demoX = (e.clientX - r.left) / s; demoY = (e.clientY - r.top) / s;
 });
 function showMe(){
   var st = nextStep(); if(!st) return;
   var el = document.querySelector(st.el); if(!el || !el.getClientRects().length) return;
-  try { el.scrollIntoView({block:'center', inline:'nearest'}); } catch(err){}
+  try { el.scrollIntoView({block:'nearest', inline:'nearest'}); } catch(err){}
+  stage.scrollTop = 0; stage.scrollLeft = 0;
   var cur = $('demoCur');
   if(!cur){
     cur = document.createElement('div'); cur.id = 'demoCur';
@@ -2316,7 +2319,7 @@ function showMe(){
     stage.appendChild(cur);
   }
   demoTimers.forEach(clearTimeout); demoTimers = [];
-  var sr = stage.getBoundingClientRect(), s = sr.width / 1600, r = el.getBoundingClientRect();
+  var sr = stage.getBoundingClientRect(), s = sr.width / stage.offsetWidth, r = el.getBoundingClientRect();
   var x = (r.left - sr.left) / s + Math.min(r.width / s / 2, 70), y = (r.top - sr.top) / s + r.height / s / 2;
   cur.className = ''; cur.style.transition = 'none'; cur.style.left = demoX + 'px'; cur.style.top = demoY + 'px';
   void cur.offsetWidth; cur.style.transition = '';
